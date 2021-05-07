@@ -29,12 +29,14 @@
                 <property name="margin_right">5</property>
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">5</property>
+                <property name="activates_default">True</property>
                 <property name="secondary_icon_stock">gtk-close</property>
                 <property name="primary_icon_name">edit-find-symbolic</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="primary_icon_sensitive">False</property>
                 <property name="placeholder_text" translatable="yes">_word</property>
                 <signal name="activate" handler="do_search" swapped="no"/>
+                <signal name="key-press-event" handler="autoComplete" swapped="no"/>
                 <signal name="search-changed" handler="quickSuggest" swapped="no"/>
               </object>
               <packing>
@@ -74,7 +76,7 @@
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkEntry" id="entry">
+              <object class="GtkEntry" id="suggest">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="primary_icon_stock">gtk-media-next</property>
@@ -318,7 +320,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box6">
+          <object class="GtkBox" id="tea">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
