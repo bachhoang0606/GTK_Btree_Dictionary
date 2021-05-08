@@ -26,7 +26,6 @@ GtkWidget *button6;
 // Btree
 
 BTA *tree;
-char notice[100];
 
 // hien thong tin team
 
@@ -66,12 +65,12 @@ void add_edit_data(GtkWidget* button)
     
     if (btsel(tree, textget, data, 1000, &rsize))  
     {
-        btins(tree, textget, btext, strlen(btext));  
-        gtk_label_set_text(notify,"Added data !");
+        btins(tree, textget, btext, strlen(btext)+1);  
+        gtk_label_set_text(notify,"Data added successfully !");
     }else
     {
-        btupd(tree, textget, btext, strlen(btext));
-        gtk_label_set_text(notify,"Edited data !");
+        btupd(tree, textget, btext, strlen(btext)+1);
+        gtk_label_set_text(notify,"Successful data editing !");
     }
 
     gtk_entry_set_text(text_search,"");
@@ -102,10 +101,10 @@ void do_delete(GtkWidget *button)
         gtk_entry_set_text(text_search,"");
 	    gtk_text_buffer_set_text(textbuffer_data,"",-1);
         gtk_text_buffer_set_text(textbuffer_trans,"",-1);
-        gtk_label_set_text(notify,"DELETE DATA !");
+        gtk_label_set_text(notify, "Deleted data successfully !");
     } else
     {
-        gtk_label_set_text(notify,"ERROR!\nCAN NOT DELETE.");
+        gtk_label_set_text(notify,"ERROR !\nCAN NOT DELETE !");
         return;
     }
        
@@ -139,16 +138,14 @@ void do_search(GtkWidget *button)
     else{
         if (btsel(tree, textget, data, 1000, &rsize))
         {  
-            gtk_text_buffer_set_text(textbuffer_data,"Not found.\nInput to add",-1);
+            gtk_text_buffer_set_text(textbuffer_data,"=> Add data here",-1);
             gtk_text_buffer_set_text(textbuffer_trans,textget,-1); 
-            strcpy(notice,"Add a new word ?\nInput the meaning.");
-    		gtk_label_set_text(notify,notice);
+    		gtk_label_set_text(notify, "So bad i can't find it !");
             gtk_widget_show(add);  
         }
         else
         {   
-            strcpy(notice,"Find.");
-    		gtk_label_set_text(notify,notice);
+    		gtk_label_set_text(notify, "Great, I found it !");
             gtk_text_buffer_set_text(textbuffer_trans,textget,-1); 
             gtk_text_buffer_set_text(textbuffer_data,data,-1);            
             gtk_widget_show(delete);
@@ -175,8 +172,7 @@ gboolean autoComplete(GtkWidget *widget, GdkEventKey *key, gpointer user_data){
         {
             press_tab[count] = suggests[count];
         }while(suggests[++count] != '\t');
-        suggests[count] = '\0';
-        printf("start%send\n", press_tab);
+        press_tab[count] = '\0';
         gtk_entry_set_text(widget, press_tab);
 		return 1;
 	}
