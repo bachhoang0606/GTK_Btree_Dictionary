@@ -29,6 +29,7 @@
                 <property name="margin_right">5</property>
                 <property name="margin_top">5</property>
                 <property name="margin_bottom">5</property>
+                <property name="activates_default">True</property>
                 <property name="secondary_icon_stock">gtk-close</property>
                 <property name="primary_icon_name">edit-find-symbolic</property>
                 <property name="primary_icon_activatable">False</property>
@@ -367,7 +368,6 @@
                     <property name="can_focus">False</property>
                     <property name="margin_top">11</property>
                     <property name="margin_bottom">8</property>
-                    <property name="label" translatable="yes">Design: </property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -394,7 +394,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_top">2</property>
-                    <property name="label" translatable="yes">Pham Quynh Giao</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -410,7 +409,8 @@
                     <property name="valign">center</property>
                     <property name="margin_top">1</property>
                     <property name="label" translatable="yes">Hoang Xuan Bach
-Luu Van Hiep</property>
+Luu Van Hiep
+Pham Thi Quynh Giao</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -426,7 +426,7 @@ Luu Van Hiep</property>
                     <property name="valign">center</property>
                     <property name="margin_top">7</property>
                     <property name="margin_bottom">7</property>
-                    <property name="label" translatable="yes">Project of VN K64</property>
+                    <property name="label" translatable="yes">Project1 VN K64</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>

@@ -1,8 +1,10 @@
+// gcc `pkg-config --cflags gtk+-3.0` -o main main.c `pkg-config --libs gtk+-3.0` -w libbt.a -rdynamic 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
+
 #include <gdk/gdkkeysyms.h>
 
 #include "bt-5.0.1/inc/btree.h"
@@ -96,7 +98,7 @@ void do_delete(GtkWidget *button)
     textbuffer_data = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_data));
     textbuffer_trans = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_trans));
     
-    if(!btdel(tree, textget))
+    if( !btdel(tree, textget) )
 	{
         gtk_entry_set_text(text_search,"");
 	    gtk_text_buffer_set_text(textbuffer_data,"",-1);
@@ -129,14 +131,14 @@ void do_search(GtkWidget *button)
     textbuffer_data = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_data));
     textbuffer_trans = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_trans));
 
-    if (!strcmp(textget,""))
+    if ( !strcmp(textget,"") )
     {
         gtk_text_buffer_set_text(textbuffer_data,"",-1);
         gtk_text_buffer_set_text(textbuffer_trans,"",-1);
         gtk_label_set_text(notify,"");
     }    
     else{
-        if (btsel(tree, textget, data, 1000, &rsize))
+        if ( btsel(tree, textget, data, 1000, &rsize) )
         {  
             gtk_text_buffer_set_text(textbuffer_data,"=> Add data here",-1);
             gtk_text_buffer_set_text(textbuffer_trans,textget,-1); 
@@ -157,23 +159,52 @@ void do_search(GtkWidget *button)
 
 // an tab tu dong dien string dau tien trong suggest vao searchetry
 
+void getStr(char *buffer, char *press_tab, char *press_tab_tab)
+{
+    if( !strlen(buffer) ) return;
+    int count=0;
+    int count_tab_tab=0;
+    do
+    {
+        press_tab[count] = buffer[count];
+    }while( buffer[++count]!='\t' );
+    press_tab[count++] = '\0';
+
+    if( buffer[count]=='\0' ) return;
+
+    do
+    {
+        press_tab_tab[count_tab_tab++] = buffer[count];
+    }while(buffer[++count] != '\t');
+    press_tab_tab[count_tab_tab] = '\0';
+}
+
+// return 0 thi an tad chuyen sang wiget khac return 1 khong chuyen wiget khac
+
 gboolean autoComplete(GtkWidget *widget, GdkEventKey *key, gpointer user_data){
 	
 	gchar *suggests, *textget;
-    char press_tab[100];
+    char *press_tab = (char*)calloc(100, sizeof(char));
+    char *press_tab_tab = (char*)calloc(100, sizeof(char));
     int count = 0;
 
     suggests = gtk_entry_get_text(GTK_ENTRY(text_suggest));
 	textget = gtk_entry_get_text(GTK_ENTRY(widget));
-	
-	if(key->keyval == GDK_KEY_Tab)
+   
+	if( key->keyval==GDK_KEY_Tab )
     {
-		do
+		getStr(suggests, press_tab, press_tab_tab);
+
+        // printf(".%s.%s.\n", press_tab, press_tab_tab);
+
+        if( !strlen(press_tab) ) return 1;
+        
+        if( !strcmp(textget, press_tab) )
         {
-            press_tab[count] = suggests[count];
-        }while(suggests[++count] != '\t');
-        press_tab[count] = '\0';
-        gtk_entry_set_text(widget, press_tab);
+            if( !strlen(press_tab_tab) ) return 1;
+            gtk_entry_set_text(widget, press_tab_tab);
+        } else 
+            gtk_entry_set_text(widget, press_tab);
 		return 1;
 	}
 	return 0;
@@ -193,7 +224,7 @@ void quickSuggest(GtkButton *button)
     textbuffer_data = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_data));
     textbuffer_trans = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_trans));
 
-    if (!strcmp(textget,"")) //neu search entry == null
+    if ( !strcmp(textget,"") ) //neu search entry == null
     {
         gtk_text_buffer_set_text(textbuffer_data,"",-1);
         gtk_text_buffer_set_text(textbuffer_trans,"",-1);
@@ -210,14 +241,14 @@ void quickSuggest(GtkButton *button)
         strcpy(tmp, textget);
         strcpy(suggests, ""); // khong strcpy co tro tro linh tinh ??
         btsel(tree, "", data, 1000, &rsize);
-        while(!btseln(tree, tmp, data, 1000, &rsize))
+        while( !btseln(tree, tmp, data, 1000, &rsize) )
         {
-            if(!memcmp(textget, tmp, strlen(textget)))
+            if( !memcmp(textget, tmp, strlen(textget)) )
             {
                 strncat(suggests, tmp, strlen(tmp));
                 strncat(suggests,"\t",2);
             }
-            if(strlen(suggests) >= 100) break;
+            if( strlen(suggests) >= 100 ) break;
         }
 
         gtk_entry_set_text(text_suggest, suggests);
